@@ -39,6 +39,12 @@ userSchema.pre("save",async function(next){
        next()
 })
 
-//adding methods to check whether the user has entered the correct password or not 
+//adding methods to check whether the user has entered the correct password or not, this method is for already registered user and will be used in login route
+
+userSchema.methods.isPasswordCorrect=async function(password){
+    return  await bcrypt.compare(password,this.password)
+}
+//Explanation for the isPasswordCorrect method:
+// Whenever I will do await user.isPasswordCorrect. then this await is on the promise returned by the async function and inside the async function the line return await bcrypt.compare(password,this.password) here bcrypt.compare() creates a promise and since await is written before it so this function will only return when this promsie get resolved. and we know that the promise returned by the async function always gets resolved with the value that function is returning so there when the line return await bcrypt.compare(password,this.password) return true or false then await user.isPasswordCorrect() get resolved with the returned value
 
 export  const User= mongoose.model("User", userSchema);
