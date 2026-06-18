@@ -30,7 +30,7 @@ const userSchema = new mongoose.Schema({
 }, { timestamps: true })
 
 
-userSchema.pre("save",async function(){
+userSchema.pre("save",async function(){   // in pre save hook when we use async function then mongoose does not pass next as a parameter 
        if(!this.isModified("password"))
        {
         return ;
