@@ -80,5 +80,68 @@ const registerUser = asyncHandler(async (req, res) => {
     //  res.cookie tell Express to send a Set-Cookie header in the HTTP response, now browser receives that response and store the cookies in the browser. 
 })
 
+/**
+ *  @param {*} req 
+ * @param {*} res 
+ * @description expects  email and password and then login a user 
+ */
+const loginUser = asyncHandler(async (req, res) => {
+    //  take imput(email and password) from req.body
+    // validate the input 
+    // find if user with this email exist or not, if not throw error 
+    // if user exist then validate password 
+    // if password is correct then login the user 
+    const { email, password } = req.body
 
-export { registerUser }
+    if ([email, password].some(field => !field || field?.trim() === "")) {
+        throw new ApiError(400, "all field are required");
+    }
+    if (!email.includes("@")) {
+        throw new ApiError(400, "Invalid Email");
+    }
+
+    const user = await User.findOne({ email }, { email: 1, password: 1 });
+
+    if (!user) {
+        throw new ApiError(404, "This User does not exist")
+    }
+
+    const isPasswordCorrect = await user.isPasswordCorrect(password);
+    if (!isPasswordCorrect) {
+        throw new ApiError(401, "Invalid User credentials")
+    }
+
+    const token = jwt.sign(
+        {
+            id: user._id,
+            username: user.username
+        },
+        process.env.JWT_SECRET,
+        {
+            expiresIn: process.env.TOKEN_EXPIRY
+        }
+
+    )
+
+    const options = {
+        httpOnly: true
+    }
+
+    res
+        .status(200)
+        .cookie("token", token, options)
+        .json(new ApiResponse(
+            "user logged in successfully",
+            200,
+            {
+                id: user._id,
+                username: user.username,
+                email: user.email,
+
+            }
+
+        ))
+})
+
+
+export { registerUser, loginUser }

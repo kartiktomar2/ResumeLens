@@ -30,13 +30,13 @@ const userSchema = new mongoose.Schema({
 }, { timestamps: true })
 
 
-userSchema.pre("save",async function(next){
+userSchema.pre("save",async function(){
        if(!this.isModified("password"))
        {
-        return  next()
+        return ;
        }
        this.password=await bcrypt.hash(this.password,10)
-       next()
+       
 })
 
 //adding methods to check whether the user has entered the correct password or not, this method is for already registered user and will be used in login route
