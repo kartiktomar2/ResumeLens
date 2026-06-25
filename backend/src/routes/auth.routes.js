@@ -1,5 +1,6 @@
 import express from "express"
-import { loginUser, registerUser } from "../controller/auth.controller.js"
+import { loginUser, logoutUser, registerUser } from "../controller/auth.controller.js"
+import { verifyJWT } from "../middleware/auth.middleware.js"
 
 
 const authRouter= express.Router()
@@ -17,4 +18,10 @@ authRouter.route("/register").post(registerUser)
  */
 authRouter.route("/login").post(loginUser)
 
+
+/**
+ * @route POST /api/auth/logout
+ * @description remove token from cookies and add token to blacklist 
+ */
+authRouter.route("/logout").post(verifyJWT, logoutUser)
 export default authRouter

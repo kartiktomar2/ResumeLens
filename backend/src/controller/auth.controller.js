@@ -3,7 +3,7 @@ import { ApiError } from "../utils/ApiError.js"
 import { ApiResponse } from "../utils/ApiResponse.js"
 import { asyncHandler } from "../utils/asyncHandler.js"
 import jwt from "jsonwebtoken"
-
+import { BlacklistToken } from "../models/blacklist.model.js";
 
 
 
@@ -101,6 +101,12 @@ const loginUser = asyncHandler(async (req, res) => {
     }
 
     const user = await User.findOne({ email }, { email: 1, password: 1 });
+    // The general rule to remember
+    // Whenever you write:
+    //const result = await somePromise;
+    // there are only two possibilities:
+    // If somePromise fulfills, result gets the fulfilled value and execution continues.
+    // If somePromise rejects, await throws the rejection reason as an exception at that line.If you don't catch that exception inside the async function, JavaScript automatically rejects the Promise returned by the async function.
 
     if (!user) {
         throw new ApiError(404, "This User does not exist")
@@ -144,4 +150,38 @@ const loginUser = asyncHandler(async (req, res) => {
 })
 
 
-export { registerUser, loginUser }
+//blacklisting token can be implemented by maintaining a list of blacklisted tokens in the database and checking against that list during authentication. When a user logs out, their token can be added to the blacklist, preventing it from being used for future authentication. Moreover jwt add ist when generating token two token can't be same. 
+
+/**
+ * 
+ *  @param {*} req 
+ * @param {*} res 
+ * @description clear token from browser and add token to blacklist 
+ */
+const logoutUser = asyncHandler(async (req, res) => {
+    const { user } = req;
+    const token = req.cookies.token;
+    
+
+    // adding token in the blacklist
+    await BlacklistToken.create({
+        token: token
+    })
+
+    const options = {
+        httpOnly: true
+    }
+
+    res
+        .status(200)
+        .clearCookie("token",options)
+        .json(new ApiResponse(
+               "User logged out successfully",
+               200,
+               {
+                  username:user.username
+               }
+        ))
+})
+
+export { registerUser, loginUser, logoutUser }
