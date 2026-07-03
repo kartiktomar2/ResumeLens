@@ -1,3 +1,4 @@
+import { BlacklistToken } from "../models/blacklist.model.js";
 import { User } from "../models/user.model.js";
 import { ApiError } from "../utils/ApiError.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
@@ -12,8 +13,11 @@ export const verifyJWT = asyncHandler(async (req, res, next) => {
         }
         const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
       
-
-
+        const isTokenBlacklisted= await BlacklistToken.findOne({token})
+         if(isTokenBlacklisted)
+         {
+              throw new ApiError(401, "Blacklisted token") 
+         }
 
 
         // finding whether the user exist or not(user deleted from db)

@@ -1,5 +1,5 @@
 import express from "express"
-import { loginUser, logoutUser, registerUser } from "../controller/auth.controller.js"
+import { currentUser, loginUser, logoutUser, registerUser } from "../controller/auth.controller.js"
 import { verifyJWT } from "../middleware/auth.middleware.js"
 
 
@@ -24,4 +24,13 @@ authRouter.route("/login").post(loginUser)
  * @description remove token from cookies and add token to blacklist 
  */
 authRouter.route("/logout").post(verifyJWT, logoutUser)
+
+
+/**
+ * @route GET /api/auth/current-user
+ * @description get the current logged-in user
+ */
+authRouter.route("/current-user").get(verifyJWT, currentUser)
+
+
 export default authRouter

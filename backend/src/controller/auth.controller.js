@@ -184,4 +184,20 @@ const logoutUser = asyncHandler(async (req, res) => {
         ))
 })
 
-export { registerUser, loginUser, logoutUser }
+
+const currentUser= asyncHandler(async(req,res)=>{
+       const {user}= req
+
+       res
+       .status(200)
+       .json(new ApiResponse(
+           "current loggedin user",
+           200,
+           {
+              name: user.username,
+              email:user.email
+           }
+       ))
+})
+
+export { registerUser, loginUser, logoutUser, currentUser }
