@@ -100,7 +100,7 @@ const loginUser = asyncHandler(async (req, res) => {
         throw new ApiError(400, "Invalid Email");
     }
 
-    const user = await User.findOne({ email }, { email: 1, password: 1 });
+    const user = await User.findOne({ email });
     // The general rule to remember
     // Whenever you write:
     //const result = await somePromise;

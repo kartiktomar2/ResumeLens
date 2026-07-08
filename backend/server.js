@@ -7,12 +7,12 @@ configDotenv({ path: './.env' })
 
 
 connectDb()
-.then(() => {
-      app.listen(3000, () => {
-            console.log(`Server is listening on port 3000`)
+      .then(() => {
+            app.listen(3000, () => {
+                  console.log(`Server is listening on port 3000`)
 
+            })
       })
-})
-.catch((err) => {
-       console.log(err.message)
-})
+      .catch((err) => {
+            console.log(err.message)
+      })
