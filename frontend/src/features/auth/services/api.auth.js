@@ -15,6 +15,7 @@ export async function registerUser({username, email, password})
         return response.data;
       } catch (error) {
           console.log("error received in frontend while registering user is: ",error.response.data)
+          throw error
       }    
 }
 

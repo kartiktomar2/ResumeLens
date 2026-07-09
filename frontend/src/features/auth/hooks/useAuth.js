@@ -34,7 +34,7 @@ export const useAuth = () => {
             const result = await registerUser({ username, email, password })
             setUser(result.data)
         } catch (error) {
-
+               throw error
         }
         finally {
 
