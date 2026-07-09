@@ -47,10 +47,14 @@ export async function logoutUser() {
 
 export async function getCurrentUser() {
     try {
-        const response=  await axios.get("/api/auth/current-user");
+        // console.log("api called")
+        const response=  await api.get("/api/auth/current-user");
+        // console.log("api finished", response.data)
+        
         return response.data;
 
     } catch (error) {
          console.log("error received in frontend while getCurrentUser is: ",error.response.data)
+         throw error;
     }
 }
