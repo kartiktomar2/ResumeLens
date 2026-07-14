@@ -18,8 +18,11 @@ app.use(cookieParser())
 
 // routes
 import authRouter from "./routes/auth.routes.js";
-app.use("/api/auth", authRouter)
+import interviewRouter from "./routes/interview.routes.js";
 
+
+app.use("/api/auth", authRouter)
+app.use("/api/interview", interviewRouter)
 
 
 

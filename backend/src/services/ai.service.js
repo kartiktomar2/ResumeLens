@@ -1,5 +1,6 @@
 import { GoogleGenAI } from "@google/genai"
 import * as z from "zod";
+import { ApiError } from "../utils/ApiError.js";
 
 const ai = new GoogleGenAI({
     apiKey: process.env.ApiKey
@@ -186,6 +187,7 @@ Instructions:
         return interviewReport;
     } catch (error) {
         console.log("failed generating interview report due to: ", error)
+        throw new ApiError(500,"Failed to generate interview Report",error)
     }
 
 }
