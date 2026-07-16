@@ -129,9 +129,13 @@ const interviewReportJSONSchema = {
                 additionalProperties: false
             }
         },
+        title:{
+           type:"string",
+           description:"The job title extracted from the provided job description." 
+        }
 
     },
-    required: ["matchScore", "technicalQuestion", "behavioralQuestion", "skillGap", "preparationPlan"],
+    required: ["matchScore", "technicalQuestion", "behavioralQuestion", "skillGap", "preparationPlan","title"],
     additionalProperties: false
 }
 
