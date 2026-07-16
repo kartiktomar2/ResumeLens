@@ -54,7 +54,7 @@ export async function getCurrentUser() {
         return response.data;
 
     } catch (error) {
-         console.log("error received in frontend while getCurrentUser is: ",error.response.data)
+         console.log("error received in frontend while getCurrentUser is: ",error?.response?.data)     
          throw error;
     }
 }
