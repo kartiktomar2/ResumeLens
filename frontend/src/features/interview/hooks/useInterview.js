@@ -9,9 +9,15 @@ export const useInterview=()=>{
          
          const generateReport= async({ jobDescription, selfDescription, resume })=>{
                      setLoading(true)
+                     let result;
                  try {
-                       const result= await generateInterviewReport({jobDescription, selfDescription, resume})
+                        result= await generateInterviewReport({jobDescription, selfDescription, resume})
+                        // console.dir(result,{
+                        //      depth:null
+                        // })
                        setReport(result.data)
+                       return result.data
+                       
                  } catch (error) {
                          throw error
                  }
