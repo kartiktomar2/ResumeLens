@@ -5,10 +5,10 @@ import {generateInterviewReport,getAllInterviewReports,getInterviewReportById} f
 
 
 export const useInterview=()=>{
-         const {loading,setLoading, report,setReport, reports, setReports}= useContext(InterviewContext)
+         const {loading,setLoading, interviewReportLoading, setInterviewReportLoading, report,setReport, reports, setReports}= useContext(InterviewContext)
          
          const generateReport= async({ jobDescription, selfDescription, resume })=>{
-                     setLoading(true)
+                     setInterviewReportLoading(true)
                      let result;
                  try {
                         result= await generateInterviewReport({jobDescription, selfDescription, resume})
@@ -22,7 +22,7 @@ export const useInterview=()=>{
                          throw error
                  }
                  finally{
-                     setLoading(false)
+                     setInterviewReportLoading(false)
                  }
          }
          
@@ -51,5 +51,5 @@ export const useInterview=()=>{
                   setLoading(false)
               }
          }
-         return {loading, report, reports, generateReport, getReportById, getAllReports}
+         return {loading,interviewReportLoading, report, reports, generateReport, getReportById, getAllReports}
 }

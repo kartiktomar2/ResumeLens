@@ -11,7 +11,7 @@ const Home = () => {
     const [resume, setResume] = useState(null)
     const [uploadError, setUploadError] = useState("")
     const [fileUploadTime, setFileUploadTime] = useState(null)
-    const { loading, generateReport, getAllReports } = useInterview()
+    const {loading, interviewReportLoading, generateReport, getAllReports,  } = useInterview()
     const navigate = useNavigate()
 
     const MAX_FILE_SIZE = 1 * 1024 * 1024
@@ -70,9 +70,10 @@ const Home = () => {
         <div className='home-page'>
 
             {/* Page Header */}
-            {
-                loading ?(<div> Creating Your Interview Plan 
-                     </div>) :
+            {  interviewReportLoading ? (<div> Generating Interview Report... Please wait...</div>) :
+                loading ?(<main> 
+                       <h1>Loading Home Page...</h1>
+                     </main>) :
                     <>
                         <header className='page-header'>
                             <h1>Create Your Custom <span className='highlight'>Interview Plan</span></h1>
