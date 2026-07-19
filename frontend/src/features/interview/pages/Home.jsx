@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import "../styles/home.scss"
 import { useInterview } from '../hooks/useInterview.js'
 import { useNavigate } from "react-router"
+import AllInterviewReports from './AllInterviewReports.jsx'
 
 const Home = () => {
 
@@ -10,7 +11,7 @@ const Home = () => {
     const [resume, setResume] = useState(null)
     const [uploadError, setUploadError] = useState("")
     const [fileUploadTime, setFileUploadTime] = useState(null)
-    const { loading, generateReport } = useInterview()
+    const { loading, generateReport, getAllReports } = useInterview()
     const navigate = useNavigate()
 
     const MAX_FILE_SIZE = 1 * 1024 * 1024
@@ -60,7 +61,10 @@ const Home = () => {
             console.log("failed to generate interview report: ", error)
         }
     }
-
+     
+      useEffect(()=>{
+          getAllReports()
+     },[])
 
     return (
         <div className='home-page'>
@@ -190,6 +194,10 @@ const Home = () => {
                                 </button>
                             </div>
                         </div>
+
+
+                        {/* all interview reports */}
+                         <AllInterviewReports/>
                     </>
             }
 

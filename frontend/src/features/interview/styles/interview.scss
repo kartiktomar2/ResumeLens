@@ -18,19 +18,31 @@ $severity-low:    #3fb950;
 // ── Page Shell ────────────────────────────────────────────────────────────────
 .interview-page {
     width: 100%;
-    min-height: 100vh;
+    height: 100vh;
     background-color: $bg-page;
     color: $text-primary;
     font-family: $font-stack;
     display: flex;
+    flex-direction: column;
     align-items: stretch;
     padding: 1.5rem;
     box-sizing: border-box;
+    overflow: hidden;
+}
+
+.interview-footer {
+    width: 100%;
+    max-width: 1280px;
+    margin: 1rem auto 0;
+    display: flex;
+    justify-content: center;
+    flex-shrink: 0;
 }
 
 // ── 3-Column Layout ───────────────────────────────────────────────────────────
 .interview-layout {
     display: flex;
+    flex: 1;
     width: 100%;
     max-width: 1280px;
     margin: 0 auto;
@@ -38,7 +50,7 @@ $severity-low:    #3fb950;
     border: 1px solid $border-color;
     border-radius: 1rem;
     overflow: hidden;
-    min-height: calc(100vh - 3rem);
+    min-height: 0;
 }
 
 .interview-divider {
@@ -55,6 +67,14 @@ $severity-low:    #3fb950;
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
+    min-height: 0;
+    overflow-y: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
 
     &__label {
         font-size: 0.7rem;
@@ -107,12 +127,20 @@ $severity-low:    #3fb950;
 // ── Center Content ────────────────────────────────────────────────────────────
 .interview-content {
     flex: 1;
+    display: flex;
+    flex-direction: column;
     padding: 1.75rem 2rem;
-    overflow-y: auto;
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+}
 
-    section {
-        height: 100%;
-    }
+.content-panel {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
 }
 
 .content-header {
@@ -122,6 +150,11 @@ $severity-low:    #3fb950;
     margin-bottom: 1.5rem;
     padding-bottom: 1rem;
     border-bottom: 1px solid $border-color;
+    flex-shrink: 0;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background-color: $bg-card;
 
     h2 {
         font-size: 1.1rem;
@@ -141,6 +174,20 @@ $severity-low:    #3fb950;
 }
 
 // ── Question Cards ────────────────────────────────────────────────────────────
+.content-body {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding-right: 0.25rem;
+    padding-bottom: 0.5rem;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
+
 .q-list {
     display: flex;
     flex-direction: column;
@@ -336,6 +383,36 @@ $severity-low:    #3fb950;
     }
 }
 
+// ── Footer Button ───────────────────────────────────────────────────────────
+.home-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.1rem;
+    border-radius: 0.6rem;
+    background: linear-gradient(135deg, $accent 0%, #ff6b9d 100%);
+    color: #fff;
+    text-decoration: none;
+    font-family: $font-stack;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: transform 0.15s ease, opacity 0.15s ease;
+
+    &:hover {
+        opacity: 0.95;
+        transform: translateY(-1px);
+    }
+
+    &:active {
+        transform: scale(0.98);
+    }
+
+    svg {
+        width: 16px;
+        height: 16px;
+    }
+}
+
 // ── Right Sidebar ─────────────────────────────────────────────────────────────
 .interview-sidebar {
     width: 240px;
@@ -344,6 +421,14 @@ $severity-low:    #3fb950;
     display: flex;
     flex-direction: column;
     gap: 1.25rem;
+    min-height: 0;
+    overflow-y: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
 }
 
 .sidebar-divider {

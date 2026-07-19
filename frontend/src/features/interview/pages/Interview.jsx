@@ -1,7 +1,7 @@
-import React, { useEffect, useState, useLayoutEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import "../styles/interview.scss"
 import { useInterview } from '../hooks/useInterview.js'
-import { useParams } from 'react-router'
+import { Link, useParams } from 'react-router'
 
 
 const NAV_ITEMS = [
@@ -63,7 +63,7 @@ const Interview = () => {
 
     useEffect(() => {
 
-        if (interviewId && (!report)) {
+        if (interviewId) {
             console.log("condtion called")
             getReportById(interviewId)
         }
@@ -101,43 +101,49 @@ const Interview = () => {
                             {/* ── Center Content ── */}
                             <main className='interview-content'>
                                 {activeNav === 'technical' && (
-                                    <section>
+                                    <section className='content-panel'>
                                         <div className='content-header'>
                                             <h2>Technical Questions</h2>
                                             <span className='content-header__count'>{report.technicalQuestion.length} questions</span>
                                         </div>
-                                        <div className='q-list'>
-                                            {report.technicalQuestion.map((q, i) => (
-                                                <QuestionCard key={i} item={q} index={i} />
-                                            ))}
+                                        <div className='content-body'>
+                                            <div className='q-list'>
+                                                {report.technicalQuestion.map((q, i) => (
+                                                    <QuestionCard key={i} item={q} index={i} />
+                                                ))}
+                                            </div>
                                         </div>
                                     </section>
                                 )}
 
                                 {activeNav === 'behavioral' && (
-                                    <section>
+                                    <section className='content-panel'>
                                         <div className='content-header'>
                                             <h2>Behavioral Questions</h2>
                                             <span className='content-header__count'>{report.behavioralQuestion.length} questions</span>
                                         </div>
-                                        <div className='q-list'>
-                                            {report.behavioralQuestion.map((q, i) => (
-                                                <QuestionCard key={i} item={q} index={i} />
-                                            ))}
+                                        <div className='content-body'>
+                                            <div className='q-list'>
+                                                {report.behavioralQuestion.map((q, i) => (
+                                                    <QuestionCard key={i} item={q} index={i} />
+                                                ))}
+                                            </div>
                                         </div>
                                     </section>
                                 )}
 
                                 {activeNav === 'roadmap' && (
-                                    <section>
+                                    <section className='content-panel'>
                                         <div className='content-header'>
                                             <h2>Preparation Road Map</h2>
                                             <span className='content-header__count'>{report.preparationPlan.length}-day plan</span>
                                         </div>
-                                        <div className='roadmap-list'>
-                                            {report.preparationPlan.map((day) => (
-                                                <RoadMapDay key={day.day} day={day} />
-                                            ))}
+                                        <div className='content-body'>
+                                            <div className='roadmap-list'>
+                                                {report.preparationPlan.map((day) => (
+                                                    <RoadMapDay key={day.day} day={day} />
+                                                ))}
+                                            </div>
                                         </div>
                                     </section>
                                 )}
@@ -183,6 +189,15 @@ const Interview = () => {
 
             </div>
 
+            <div className='interview-footer'>
+                <Link className='home-btn' to='/'>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M3 10.5 12 3l9 7.5" />
+                        <path d="M5 10.5V21h5v-6h4v6h5V10.5" />
+                    </svg>
+                    Back to Home
+                </Link>
+            </div>
         </div>
     )
 }
