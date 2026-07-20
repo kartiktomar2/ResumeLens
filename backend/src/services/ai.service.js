@@ -1,6 +1,7 @@
 import { GoogleGenAI } from "@google/genai"
 import * as z from "zod";
 import { ApiError } from "../utils/ApiError.js";
+import puppeteer from 'puppeteer';
 
 const ai = new GoogleGenAI({
     apiKey: process.env.ApiKey
@@ -129,13 +130,13 @@ const interviewReportJSONSchema = {
                 additionalProperties: false
             }
         },
-        title:{
-           type:"string",
-           description:"The job title extracted from the provided job description." 
+        title: {
+            type: "string",
+            description: "The job title extracted from the provided job description."
         }
 
     },
-    required: ["matchScore", "technicalQuestion", "behavioralQuestion", "skillGap", "preparationPlan","title"],
+    required: ["matchScore", "technicalQuestion", "behavioralQuestion", "skillGap", "preparationPlan", "title"],
     additionalProperties: false
 }
 
@@ -191,9 +192,145 @@ Instructions:
         return interviewReport;
     } catch (error) {
         console.log("failed generating interview report due to: ", error)
-        throw new ApiError(500,"Failed to generate interview Report",error)
+        throw new ApiError(500, "Failed to generate interview Report", error)
     }
 
 }
 
-export default generateInterviewReport;
+
+const resumeHtmlJsonSchema = {
+    type: "object",
+    properties: {
+        html: {
+            type: "string",
+            description: "The HTML content of the resume which can be converted to PDF using any library like puppeteer"
+        },
+    },
+    required: ["html"],
+    additionalProperties: false
+}
+
+const resumeHtmlValidator = z.fromJSONSchema(resumeHtmlJsonSchema);
+
+
+async function generatePdfFromHtml(htmlContent) {
+    let browser;
+
+    try {
+        browser = await puppeteer.launch({
+            headless: true
+        });
+
+        const page = await browser.newPage();
+
+        await page.setContent(htmlContent, {
+            waitUntil: "networkidle0"
+        });
+
+        await page.evaluateHandle("document.fonts.ready");
+
+        return await page.pdf({
+            format: "A4",
+            printBackground: true,
+            margin: {
+                top: "20mm",
+                bottom: "20mm",
+                left: "15mm",
+                right: "15mm"
+            }
+        });
+    } finally {
+        if (browser) {
+            await browser.close();
+        }
+    }
+}
+
+async function generateResumePdf({ resume, selfDescription, jobDescription }) {
+    const prompt = `Generate a professional, ATS-friendly resume for the candidate using the information provided below.
+
+Candidate Resume:
+${resume}
+
+Candidate Self Description:
+${selfDescription}
+
+Job Description:
+${jobDescription}
+
+Your task is to rewrite and optimize the candidate's resume so that it is highly relevant to the provided job description while remaining truthful to the candidate's actual background.
+
+Requirements:
+
+- Return the response according to the provided JSON schema.
+- The "html" field must contain a complete HTML5 document starting with <!DOCTYPE html>.
+- The HTML document must include <html>, <head>, <style>, and <body> tags.
+- Embed all CSS inside a single <style> tag.
+- Do not use JavaScript.
+- Do not use external CSS, fonts, images, icons, SVGs, or CDN resources.
+- The generated HTML should be directly usable with Puppeteer for PDF generation.
+
+Resume Content Guidelines:
+
+- Tailor the resume specifically for the provided job description.
+- Highlight the candidate's most relevant skills, projects, experience, and achievements.
+- Improve wording, clarity, and professionalism without changing factual information.
+- Do not invent companies, internships, projects, certifications, achievements, employment dates, responsibilities, technologies, or educational qualifications that are not supported by the provided information.
+- If some information is missing, simply omit that section instead of fabricating content.
+- Use strong action verbs and concise bullet points.
+- Make the resume sound natural and human-written rather than AI-generated.
+- Optimize keywords so that the resume performs well in Applicant Tracking Systems (ATS).
+- Prioritize relevance over quantity.
+- Keep the content concise enough to fit within one page whenever possible, but allow up to two pages if necessary.
+
+Resume Structure:
+
+Include appropriate sections based on the available information, such as:
+
+- Name
+- Professional Summary
+- Technical Skills
+- Work Experience
+- Projects
+- Education
+- Certifications
+- Achievements
+- Relevant Links (GitHub, LinkedIn, Portfolio, LeetCode, etc.)
+
+Do not create empty sections.
+
+Design Guidelines:
+
+- Use a clean, modern, and professional layout.
+- Use a single-column layout that is ATS-friendly.
+- Use subtle colors only for headings and accents.
+- Ensure sufficient spacing between sections.
+- Use readable typography and consistent formatting.
+- Ensure the resume prints cleanly on A4 paper.
+- Prevent content from overflowing page boundaries.
+- Use page margins appropriate for printing.
+- Avoid decorative graphics and unnecessary visual elements.
+
+The final HTML should look like a professionally designed resume that a candidate could confidently submit to recruiters without further editing.`
+    try {
+        const interaction = await ai.interactions.create({
+            model: "gemini-3.1-flash-lite",
+            input: prompt,
+            response_format: {
+                type: 'text',
+                mime_type: 'application/json',
+                schema: resumeHtmlJsonSchema
+            },
+        });
+        const resumeHTML = resumeHtmlValidator.parse(JSON.parse(interaction.output_text))
+        console.dir(resumeHTML, {
+            depth: null
+        });
+        const pdfBuffer = await generatePdfFromHtml(resumeHTML.html);
+        return pdfBuffer
+    } catch (error) {
+        console.log("failed generating resume pdf  due to: ", error)
+        throw new ApiError(500, "Failed to generate resume pdf: ", error)
+    }
+}
+export { generateInterviewReport, generateResumePdf };

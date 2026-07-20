@@ -1,5 +1,5 @@
 import { InterviewReport } from "../models/interviewReport.model.js";
-import generateInterviewReport from "../services/ai.service.js";
+import { generateInterviewReport, generateResumePdf } from "../services/ai.service.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
@@ -52,45 +52,67 @@ const generateInterviewReportController = asyncHandler(async (req, res) => {
 
 })
 
-const getInterviewReportByIdController= asyncHandler(async(req,res)=>{
-       const {interviewId}= req.params;
-       if(!interviewId)
-       {
-         throw new ApiError(400, "interview id is required")
-       }
-       
-       if(!mongoose.Types.ObjectId.isValid(interviewId))
-       {
-         throw new ApiError(400,"invalid interview id")
-       }
-       const interviewReport= await InterviewReport.findOne({_id:interviewId, user: req.user._id})
+const getInterviewReportByIdController = asyncHandler(async (req, res) => {
+    const { interviewId } = req.params;
+    if (!interviewId) {
+        throw new ApiError(400, "interview id is required")
+    }
 
-       if(!interviewReport){
-         throw new ApiError(404, "This report does not exist" )
-       }
+    if (!mongoose.Types.ObjectId.isValid(interviewId)) {
+        throw new ApiError(400, "invalid interview id")
+    }
+    const interviewReport = await InterviewReport.findOne({ _id: interviewId, user: req.user._id })
 
-        res
-       .status(200)
-       .json(new ApiResponse("interview report fetched successfully",200,interviewReport))
+    if (!interviewReport) {
+        throw new ApiError(404, "This report does not exist")
+    }
+
+    res
+        .status(200)
+        .json(new ApiResponse("interview report fetched successfully", 200, interviewReport))
 })
 
-const getAllInterviewReportsController= asyncHandler(async (req,res)=>{
-     const {_id}= req.user;
-     if(!_id)
-     {
-         throw new ApiError(400, "user id is required");
-     }
-     
-     if(!mongoose.Types.ObjectId.isValid(_id))
-     {
-         throw new ApiError(400, "invalid user id");
-     }
-     
-     const interviewReports= await InterviewReport.find({user:_id},{title:1, matchScore:1}).sort({createdAt:-1});
-      
-     res
-     .status(200)
-     .json(new ApiResponse("all interview reports fetched successfully", 200, interviewReports))
+const getAllInterviewReportsController = asyncHandler(async (req, res) => {
+    const { _id } = req.user;
+    if (!_id) {
+        throw new ApiError(400, "user id is required");
+    }
+
+    if (!mongoose.Types.ObjectId.isValid(_id)) {
+        throw new ApiError(400, "invalid user id");
+    }
+
+    const interviewReports = await InterviewReport.find({ user: _id }, { title: 1, matchScore: 1 }).sort({ createdAt: -1 });
+
+    res
+        .status(200)
+        .json(new ApiResponse("all interview reports fetched successfully", 200, interviewReports))
 })
 
-export { generateInterviewReportController, getInterviewReportByIdController, getAllInterviewReportsController }
+const generateResumePdfController = asyncHandler(async (req, res) => {
+    const { interviewReportId } = req.params
+    if (!interviewReportId) {
+        throw new ApiError(400, "interview id is required")
+    }
+
+    if (!mongoose.Types.ObjectId.isValid(interviewReportId)) {
+        throw new ApiError(400, "invalid interview id")
+    }
+    const interviewReport = await InterviewReport.findById(interviewReportId)
+
+    if (!interviewReport) {
+        throw new ApiError(404, "This report does not exist")
+    }
+    const {resume, selfDescription, jobDescription}= interviewReport;
+    const pdfBuffer= await generateResumePdf({resume,selfDescription, jobDescription})
+
+    res
+     .set({
+        "Content-Type": "application/pdf",
+        "Content-Disposition": `attachment; filename=resume_${req.user.username}.pdf`
+    })
+    .status(200)
+    .send(pdfBuffer)
+
+})
+export { generateInterviewReportController, getInterviewReportByIdController, getAllInterviewReportsController, generateResumePdfController }
