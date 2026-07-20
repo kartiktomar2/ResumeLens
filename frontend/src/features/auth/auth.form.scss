@@ -41,4 +41,33 @@ main{
         color: #e1034d;
         text-decoration: none;
     }
+
+    .auth-loader{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.9rem;
+        color: #e1034d;
+    }
+
+    .auth-loader__spinner{
+        width: 2.75rem;
+        height: 2.75rem;
+        border-radius: 50%;
+        border: 3px solid rgba(225, 3, 77, 0.18);
+        border-top-color: #e1034d;
+        animation: auth-loader-spin 0.8s linear infinite;
+    }
+
+    .auth-loader__text{
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: #1f2937;
+    }
+}
+
+@keyframes auth-loader-spin {
+    to {
+        transform: rotate(360deg);
+    }
 }

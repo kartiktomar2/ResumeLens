@@ -3,6 +3,8 @@ import "../styles/home.scss"
 import { useInterview } from '../hooks/useInterview.js'
 import { useNavigate } from "react-router"
 import AllInterviewReports from './AllInterviewReports.jsx'
+import HomeSkeleton from '../components/HomeSkeleton.jsx'
+import InterviewSkeleton from '../components/InterviewSkeleton.jsx'
 
 const Home = () => {
 
@@ -70,9 +72,9 @@ const Home = () => {
         <div className='home-page'>
 
             {/* Page Header */}
-            {  interviewReportLoading ? (<div> Generating Interview Report... Please wait...</div>) :
+            {  interviewReportLoading ? (<InterviewSkeleton />) :
                 loading ?(<main> 
-                       <h1>Loading Home Page...</h1>
+                       <HomeSkeleton />
                      </main>) :
                     <>
                         <header className='page-header'>

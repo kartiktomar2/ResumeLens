@@ -414,3 +414,367 @@ $font-stack:     system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Robot
         }
     }
 }
+
+.home-skeleton {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+
+    &__header {
+        width: 100%;
+        max-width: 760px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.7rem;
+    }
+
+    &__card,
+    &__reports {
+        box-shadow: 0 18px 45px rgba(0, 0, 0, 0.25);
+    }
+
+    &__panel {
+        min-width: 0;
+    }
+
+    &__panel-header {
+        align-items: center;
+    }
+
+    &__line,
+    &__icon,
+    &__badge,
+    &__counter,
+    &__textarea,
+    &__upload-card,
+    &__upload-icon,
+    &__info-icon,
+    &__button,
+    &__count-pill,
+    &__score-pill,
+    &__report-button {
+        position: relative;
+        overflow: hidden;
+        background: linear-gradient(90deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.09) 50%, rgba(255, 255, 255, 0.04) 100%);
+        background-size: 220% 100%;
+        animation: home-skeleton-shimmer 1.6s ease-in-out infinite;
+    }
+
+    &__line {
+        display: block;
+        height: 0.95rem;
+        border-radius: 999px;
+    }
+
+    &__line--title {
+        width: min(34rem, 78%);
+        height: 1.5rem;
+    }
+
+    &__line--title-accent {
+        width: min(19rem, 48%);
+        height: 1.5rem;
+    }
+
+    &__line--subtitle {
+        width: min(31rem, 70%);
+        height: 0.95rem;
+        margin-top: 0.2rem;
+    }
+
+    &__line--subtitle-short {
+        width: min(23rem, 54%);
+        height: 0.95rem;
+    }
+
+    &__icon {
+        width: 1.15rem;
+        height: 1.15rem;
+        border-radius: 0.35rem;
+        flex-shrink: 0;
+    }
+
+    &__badge {
+        width: 4.75rem;
+        height: 1.35rem;
+        border-radius: 0.35rem;
+        flex-shrink: 0;
+    }
+
+    &__badge--small {
+        width: 5.5rem;
+    }
+
+    &__line--panel-title {
+        width: 10.5rem;
+        height: 1rem;
+        flex: 1;
+        max-width: 12rem;
+    }
+
+    &__textarea {
+        width: 100%;
+        border-radius: 0.6rem;
+        background-color: $bg-input;
+        border: 1px solid rgba($border-color, 0.75);
+    }
+
+    &__textarea--tall {
+        min-height: 320px;
+        flex: 1;
+    }
+
+    &__textarea--short {
+        height: 96px;
+    }
+
+    &__counter {
+        width: 5.75rem;
+        height: 0.75rem;
+        border-radius: 999px;
+        align-self: flex-end;
+    }
+
+    &__line--label {
+        width: 8.25rem;
+        height: 0.9rem;
+    }
+
+    &__upload-card {
+        width: 100%;
+        min-height: 154px;
+        border-radius: 0.6rem;
+        border: 1px dashed rgba($border-color, 0.9);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0.7rem;
+        background-color: rgba($bg-input, 0.9);
+    }
+
+    &__upload-icon {
+        width: 2.2rem;
+        height: 2.2rem;
+        border-radius: 0.75rem;
+    }
+
+    &__line--upload-title {
+        width: 12.5rem;
+    }
+
+    &__line--upload-subtitle {
+        width: 7rem;
+        height: 0.8rem;
+    }
+
+    &__info-box {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+        padding: 0.85rem 1rem;
+        border-radius: 0.5rem;
+        background-color: rgba($info-bg, 0.95);
+        border: 1px solid rgba($info-border, 0.9);
+    }
+
+    &__info-icon {
+        width: 1rem;
+        height: 1rem;
+        border-radius: 999px;
+        flex-shrink: 0;
+        margin-top: 0.15rem;
+    }
+
+    &__info-lines {
+        display: flex;
+        flex-direction: column;
+        gap: 0.45rem;
+        flex: 1;
+    }
+
+    &__line--info {
+        width: 100%;
+    }
+
+    &__line--info-short {
+        width: 78%;
+    }
+
+    &__footer {
+        gap: 1rem;
+    }
+
+    &__line--footer {
+        width: 14rem;
+        height: 0.85rem;
+    }
+
+    &__button {
+        width: 15rem;
+        height: 2.8rem;
+        border-radius: 0.6rem;
+        flex-shrink: 0;
+    }
+
+    &__reports-header {
+        align-items: flex-start;
+    }
+
+    &__reports-copy {
+        display: flex;
+        flex-direction: column;
+        gap: 0.55rem;
+    }
+
+    &__line--eyebrow {
+        width: 7rem;
+        height: 0.75rem;
+    }
+
+    &__line--reports-title {
+        width: 13rem;
+        height: 1.05rem;
+    }
+
+    &__count-pill {
+        width: 5.5rem;
+        height: 2rem;
+        border-radius: 999px;
+        flex-shrink: 0;
+    }
+
+    &__report-card {
+        pointer-events: none;
+    }
+
+    &__line--report-index {
+        width: 5.25rem;
+        height: 0.8rem;
+    }
+
+    &__score-pill {
+        width: 5.5rem;
+        height: 1.75rem;
+        border-radius: 999px;
+        flex-shrink: 0;
+    }
+
+    &__line--report-title {
+        width: 88%;
+        height: 1rem;
+    }
+
+    &__line--report-title-short {
+        width: 62%;
+        height: 1rem;
+    }
+
+    &__line--report-meta {
+        width: 100%;
+        height: 0.85rem;
+    }
+
+    &__line--report-meta-short {
+        width: 84%;
+        height: 0.85rem;
+    }
+
+    &__report-button {
+        width: 9.5rem;
+        height: 2.5rem;
+        border-radius: 0.55rem;
+        margin-top: auto;
+    }
+}
+
+@keyframes home-skeleton-shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+@media (max-width: 900px) {
+    .interview-card__body {
+        flex-direction: column;
+    }
+
+    .panel-divider {
+        width: 100%;
+        height: 1px;
+    }
+
+    .interview-card__footer {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .home-skeleton {
+        &__line--title,
+        &__line--title-accent,
+        &__line--subtitle,
+        &__line--subtitle-short {
+            width: 100%;
+            max-width: 34rem;
+        }
+
+        &__line--footer,
+        &__button {
+            width: 100%;
+        }
+    }
+}
+
+@media (max-width: 640px) {
+    .home-page {
+        padding: 2rem 1rem;
+    }
+
+    .page-header h1 {
+        font-size: 1.8rem;
+    }
+
+    .reports-section {
+        padding: 1.1rem;
+
+        &__header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+    }
+
+    .home-skeleton {
+        &__header {
+            align-items: flex-start;
+        }
+
+        &__line--title {
+            height: 1.3rem;
+        }
+
+        &__line--title-accent {
+            height: 1.3rem;
+            width: 72%;
+        }
+
+        &__line--subtitle {
+            width: 94%;
+        }
+
+        &__line--subtitle-short {
+            width: 72%;
+        }
+
+        &__count-pill {
+            width: 4.75rem;
+            height: 1.8rem;
+        }
+    }
+}

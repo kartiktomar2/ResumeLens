@@ -6,7 +6,7 @@ export const InterviewContext= createContext(null);
 
 
 const InterviewContextProvider=({children})=>{
-        const [loading, setLoading]= useState(false)
+        const [loading, setLoading]= useState(true)
         const [interviewReportLoading, setInterviewReportLoading]= useState(false)
         const [report, setReport]= useState(null)
         const [reports, setReports]= useState([])

@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useLayoutEffect } from 'react'
 import "../styles/interview.scss"
 import { useInterview } from '../hooks/useInterview.js'
 import { Link, useParams } from 'react-router'
-
+import InterviewSkeleton from '../components/InterviewSkeleton.jsx'
 
 const NAV_ITEMS = [
     { id: 'technical', label: 'Technical Questions', icon: (<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="16 18 22 12 16 6" /><polyline points="8 6 2 12 8 18" /></svg>) },
@@ -61,7 +61,7 @@ const Interview = () => {
     const { interviewId } = useParams()
     const { report, getReportById, getResumePdf } = useInterview()
     const [loadingGeneratedResume, setLoadingGeneratedResume]= useState(false)
-    useEffect(() => {
+    useLayoutEffect(() => {
 
         if (interviewId) {
             console.log("condtion called")
@@ -81,7 +81,7 @@ const Interview = () => {
             <div className='interview-layout'>
 
                 {  loadingGeneratedResume? (
-                    <main>  <h1>Downloading Resume.... Please Wait...</h1> </main>
+                    <main>   <InterviewSkeleton/> </main>
                 ):
                     report ? (
                         <>
@@ -203,7 +203,9 @@ const Interview = () => {
                             
                         </>
                     ) : (
-                      <main>  <h1>Fetching your report...</h1> </main>
+                      <main>
+                        <InterviewSkeleton/>
+                      </main>
                     )
                 }
 
